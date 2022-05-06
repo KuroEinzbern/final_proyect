@@ -36,11 +36,11 @@ public class CheckoutService {
         }
 
 
-    public Checkout createCheckout(CheckoutDto checkoutDto, User user) {
+    public Checkout createCheckout(CheckoutDto checkoutDto, Users users) {
         Checkout newCheckout = new Checkout();
         newCheckout.setPaymentStrategy(checkoutDto.getPaymentStrategiesEnum());
         newCheckout.setShippingAddress(checkoutDto.getShippingAddress());
-        userService.addNewCheckout(user,newCheckout);
+        userService.addNewCheckout(users,newCheckout);
         return this.checkoutRepository.save(newCheckout);
     }
 

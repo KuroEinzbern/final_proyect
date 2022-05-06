@@ -1,6 +1,6 @@
 package com.finalproyect.model.dtos;
 
-import com.finalproyect.entities.User;
+import com.finalproyect.entities.Users;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,9 +20,9 @@ public class UserDto {
 
     private CheckoutDto checkoutDto;
 
-    public UserDto(User user){
-        this.checkoutDto= new CheckoutDto(user.getCheckout());
-        this.name= user.getName();
-        this.email= user.getEmail();
+    public UserDto(Users users){
+        this.checkoutDto= new CheckoutDto(users.getCheckout());
+        this.name= users.getName();
+        this.email= users.getEmail();
     }
 }

@@ -5,12 +5,14 @@ import com.finalproyect.entities.ShippingAddress;
 import com.finalproyect.entities.ShoppingCart;
 import com.finalproyect.model.patterns.PaymentStrategiesEnum;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class CheckoutDto {
 
 
@@ -20,6 +22,10 @@ public class CheckoutDto {
     private ShippingAddress shippingAddress;
 
     private PaymentStrategiesEnum paymentStrategiesEnum;
+
+    private Long id;
+
+
 
     public CheckoutDto(ShoppingCart shoppingCart, ShippingAddress shippingAddress, PaymentStrategiesEnum paymentStrategiesEnum) {
         this.shoppingCart = shoppingCart;

@@ -1,7 +1,7 @@
 package com.finalproyect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalproyect.controllers.PrivateApiController;
+import com.finalproyect.controllers.CheckoutController;
 import com.finalproyect.entities.*;
 import com.finalproyect.exceptions.CheckoutNotFoundException;
 import com.finalproyect.exceptions.LackOfStockException;
@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.is;
 class DemoApplicationTests {
 
     @Autowired
-    PrivateApiController controllerApi;
+    CheckoutController controllerApi;
 
     @Autowired
     public UserRepository userRepository;
@@ -87,7 +87,8 @@ class DemoApplicationTests {
     void test_successful_CreateCheckout() throws Exception {
         User persistedUser= this.userRepository.save(userRicardo);
         CheckoutDto checkout = new CheckoutDto(shopppingCart, shippingAddress, PaymentStrategiesEnum.PAYPAL);
-        ResponseEntity<CheckoutDto> responseEntity = controllerApi.createCheckout(persistedUser.getUserId(), checkout);
+        checkout.setId(persistedUser.getUserId());
+        ResponseEntity<CheckoutDto> responseEntity = controllerApi.createCheckout(checkout);
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.CREATED));
         assertThat(responseEntity.getBody().getPaymentStrategiesEnum(), is(PaymentStrategiesEnum.PAYPAL));
     }

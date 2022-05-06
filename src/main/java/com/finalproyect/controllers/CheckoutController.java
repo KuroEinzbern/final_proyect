@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 
 @RestController
-public class PrivateApiController {
+public class CheckoutController {
 
     @Autowired
     CheckoutService checkoutService;
@@ -29,16 +29,17 @@ public class PrivateApiController {
     @Autowired
     PaymentService paymentService;
 
-    @RolesAllowed("user")
-    @PostMapping("/{id}/checkout/newcheckout")
-    public ResponseEntity<CheckoutDto> createCheckout(@PathVariable("id")Long userId,CheckoutDto checkoutDto){
-        User user= this.userService.retrieveUserById(userId);
+
+    //@RolesAllowed("user")
+    @PostMapping("/checkout/newcheckout")
+    public ResponseEntity<CheckoutDto> createCheckout(@RequestBody CheckoutDto checkoutDto){
+        User user= this.userService.retrieveUserById(checkoutDto.getId());
         Checkout newCheckout=checkoutService.createCheckout(checkoutDto,user);
         return new ResponseEntity<>(new CheckoutDto(newCheckout), HttpStatus.CREATED);
     }
 
     @RolesAllowed("user")
-    @PatchMapping("/{id}/checkout/updatecheckoutinfo")
+    @PatchMapping("/checkout/updatecheckoutinfo/{id}")
     public ResponseEntity<CheckoutDto> updateCheckout(@PathVariable("id") Long userId, @RequestBody CheckoutDto checkoutDto){
         User user= this.userService.retrieveUserById(userId);
         Checkout updatedCheckout=this.checkoutService.updateCheckout(checkoutDto, user.getCheckout());
@@ -46,7 +47,7 @@ public class PrivateApiController {
     }
 
     @RolesAllowed("user")
-    @PatchMapping("/{id}/checkout/addproducts")
+    @PatchMapping("/checkout/addproducts/{id}")
     public ResponseEntity<CheckoutDto> addProduct(@PathVariable("id") Long userId, @RequestBody ProductDto productDto){
         User user= this.userService.retrieveUserById(userId);
         Checkout currentCheckout= user.getCheckout();
@@ -60,12 +61,15 @@ public class PrivateApiController {
     }
 
     @RolesAllowed("user")
-    @GetMapping("/{id}/checkout/printcheckout")
+    @GetMapping("/checkout/printcheckout/{id}")
     public ResponseEntity<UserDto> printCheckout(@PathVariable("id") Long userId){
         User user= this.userService.retrieveUserById(userId);
         return new ResponseEntity<>(new UserDto(user), HttpStatus.OK);
     }
 
-
-
+    @RolesAllowed("user")
+    @GetMapping("/saludar")
+    public String printCheckout(){
+        return "hola";
+    }
 }

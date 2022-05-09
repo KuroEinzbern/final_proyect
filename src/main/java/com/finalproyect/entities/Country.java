@@ -14,11 +14,12 @@ public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "COUNTRYID")
     private Long countryId;
 
-    @Column
+    @Column(name = "COUNTRYNAME")
     private String name;
 
-    @Column
+    @Column(name = "ISOCODE")
     private String isoCode;
 }

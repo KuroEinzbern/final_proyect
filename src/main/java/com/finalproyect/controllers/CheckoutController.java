@@ -3,7 +3,7 @@ package com.finalproyect.controllers;
 
 import com.finalproyect.entities.Checkout;
 import com.finalproyect.entities.Users;
-import com.finalproyect.exceptions.CheckoutNotFoundException;
+import com.finalproyect.model.exceptions.CheckoutNotFoundException;
 import com.finalproyect.model.dtos.CheckoutDto;
 import com.finalproyect.model.dtos.ProductDto;
 import com.finalproyect.model.dtos.UserDto;
@@ -33,43 +33,35 @@ public class CheckoutController {
     @RolesAllowed("user")
     @PostMapping("/checkout/newcheckout")
     public ResponseEntity<CheckoutDto> createCheckout(@RequestBody CheckoutDto checkoutDto){
-        Users users = this.userService.retrieveUserById(checkoutDto.getId());
-        Checkout newCheckout=checkoutService.createCheckout(checkoutDto, users);
+        Checkout newCheckout=checkoutService.createCheckout(checkoutDto);
         return new ResponseEntity<>(new CheckoutDto(newCheckout), HttpStatus.CREATED);
     }
 
     @RolesAllowed("user")
-    @PatchMapping("/checkout/updatecheckoutinfo/{id}")
-    public ResponseEntity<CheckoutDto> updateCheckout(@PathVariable("id") Long userId, @RequestBody CheckoutDto checkoutDto){
-        Users users = this.userService.retrieveUserById(userId);
-        Checkout updatedCheckout=this.checkoutService.updateCheckout(checkoutDto, users.getCheckout());
+    @PatchMapping("/checkout/updatecheckoutinfo")
+    public ResponseEntity<CheckoutDto> updateCheckout(@RequestBody CheckoutDto checkoutDto){
+        Checkout updatedCheckout=this.checkoutService.updateCheckout(checkoutDto);
         return new ResponseEntity<>(new CheckoutDto(updatedCheckout),HttpStatus.OK);
     }
 
     @RolesAllowed("user")
-    @PatchMapping("/checkout/addproducts/{id}")
-    public ResponseEntity<CheckoutDto> addProduct(@PathVariable("id") Long userId, @RequestBody ProductDto productDto){
-        Users users = this.userService.retrieveUserById(userId);
-        Checkout currentCheckout= users.getCheckout();
-        if(currentCheckout!=null) {
-            this.checkoutService.addProduct(productDto, currentCheckout);
-            return new ResponseEntity<>(new CheckoutDto(currentCheckout), HttpStatus.OK);
+    @PatchMapping("/checkout/addproducts")
+    public ResponseEntity<CheckoutDto> addProduct( @RequestBody ProductDto productDto){
+        if(checkoutService.checkoutIsNotNull()) {
+            this.checkoutService.addProduct(productDto);
+            return new ResponseEntity<>(new CheckoutDto(this.checkoutService.getCurrentCheckout()), HttpStatus.OK);
         }
         else {
-            throw new CheckoutNotFoundException("el usuario" + users.getEmail() + "con id" + userId+ "no tiene ninguna orden a su nombre");
+            Users users= this.userService.retrieveUser();
+            throw new CheckoutNotFoundException("el usuario" + users.getEmail() + "con id" + users.getUserId()+ "no tiene ninguna reserva a su nombre");
         }
     }
 
     @RolesAllowed("user")
-    @GetMapping("/checkout/printcheckout/{id}")
-    public ResponseEntity<UserDto> printCheckout(@PathVariable("id") Long userId){
-        Users users = this.userService.retrieveUserById(userId);
+    @GetMapping("/checkout/printcheckout")
+    public ResponseEntity<UserDto> printCheckout(){
+        Users users = this.userService.retrieveUser();
         return new ResponseEntity<>(new UserDto(users), HttpStatus.OK);
     }
 
-    @RolesAllowed("user")
-    @GetMapping("/saludar")
-    public String printCheckout(){
-        return "hola";
-    }
 }

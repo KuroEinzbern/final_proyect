@@ -2,7 +2,8 @@ package com.finalproyect.services;
 
 import com.finalproyect.entities.ProductForPrucharase;
 import com.finalproyect.entities.ShoppingCart;
-import com.finalproyect.exceptions.ProductNotFoundException;
+import com.finalproyect.model.exceptions.ProductNotFoundException;
+import com.finalproyect.repositories.ProductForPrucharaseRepository;
 import com.finalproyect.repositories.ShopppingCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ public class ShoppingCartService {
     @Autowired
     ShopppingCartRepository shopppingCartRepository;
 
+    @Autowired
+    ProductForPrucharaseRepository productForPrucharaseRepository;
+
 
 
     public void addToShoppingCart(ProductForPrucharase product, ShoppingCart shoppingCart){
@@ -22,7 +26,7 @@ public class ShoppingCartService {
             List<ProductForPrucharase> productList= shoppingCart.getProductsInShoppingCart();
             productList.add(product);
         }
-        this.shopppingCartRepository.save(shoppingCart);
+        ShoppingCart que=this.shopppingCartRepository.save(shoppingCart);
     }
 
 

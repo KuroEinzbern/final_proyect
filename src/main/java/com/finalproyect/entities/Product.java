@@ -11,20 +11,24 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "PRODUCTS")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "PRODUCTNAME")
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "PRODUCTCODE")
     private String productCode;
 
     @Column
     private Integer stock;
+
+    @Column(name = "UNITPRICE")
+    private Double unitPrice;
 
 
     @Override

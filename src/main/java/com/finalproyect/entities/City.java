@@ -17,10 +17,11 @@ public class City {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "CITYNAME")
     private String name;
 
 
     @ManyToOne(optional = false, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "COUNTRY")
     private Country country;
 }

@@ -17,13 +17,12 @@ public class CheckoutDto {
 
 
 
+
     private ShoppingCart shoppingCart;
 
     private ShippingAddress shippingAddress;
 
     private PaymentStrategiesEnum paymentStrategiesEnum;
-
-    private Long id;
 
 
 

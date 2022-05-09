@@ -21,7 +21,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         http.
                 antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login**","/callback/", "/webjars/**", "/error**")
+                .antMatchers("/", "/login**","/callback/", "/webjars/**", "/error**","/actuator/health")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

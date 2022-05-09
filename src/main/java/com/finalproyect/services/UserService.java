@@ -2,14 +2,10 @@ package com.finalproyect.services;
 
 import com.finalproyect.entities.Checkout;
 import com.finalproyect.entities.Users;
-import com.finalproyect.exceptions.UserNotFoundException;
+import com.finalproyect.model.dtos.KeycloakUserDataDto;
+import com.finalproyect.model.exceptions.UserNotFoundException;
 import com.finalproyect.repositories.UserRepository;
-import org.keycloak.KeycloakPrincipal;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.representations.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +15,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    KeycloakContextService keycloakContextService;
 
     public Users retrieveUserById(Long id){
         Optional<Users> user=this.userRepository.findById(id);
@@ -36,20 +35,16 @@ public class UserService {
     }
 
     public Users retrieveUser(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        KeycloakPrincipal principal = (KeycloakPrincipal)auth.getPrincipal();
-        KeycloakSecurityContext session = principal.getKeycloakSecurityContext();
-        AccessToken accessToken = session.getToken();
-        String keycloakId= accessToken.getId();
-        Users optionalUser= this.userRepository.findByKeycloakId(keycloakId);
+        KeycloakUserDataDto userData= keycloakContextService.contextData();
+        Users optionalUser= this.userRepository.findByKeycloakId(userData.getKeycloakId());
         if(optionalUser!=null){
             return optionalUser;
         }
         else {
             Users newUser= new Users();
-            newUser.setEmail(accessToken.getEmail());
-            newUser.setName(accessToken.getGivenName() + accessToken.getFamilyName());
-            newUser.setKeycloakId(keycloakId);
+            newUser.setEmail(userData.getEmail());
+            newUser.setName(userData.getFstName() + " " + userData.getLstName());
+            newUser.setKeycloakId(userData.getKeycloakId());
             return this.userRepository.save(newUser);
         }
     }

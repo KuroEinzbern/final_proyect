@@ -19,8 +19,17 @@ public class ProductForPrucharase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(name = "PRODUCTNAME")
     private String name;
+
+    @Column
+    private String productCode;
+
+    @Column
+    private Integer quantity;
+
+    @Column
+    private Double unitPrice;
 
     @Override
     public boolean equals(Object o) {
@@ -34,11 +43,5 @@ public class ProductForPrucharase {
     public int hashCode() {
         return Objects.hash(productCode);
     }
-
-    @Column
-    private String productCode;
-
-    @Column
-    private Integer quantity;
 
 }

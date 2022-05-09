@@ -18,6 +18,7 @@ public class ProductDto {
 
     private Integer quantity;
 
+
     public ProductDto(Product product){
         this.name=product.getName();
         this.productCode=product.getProductCode();

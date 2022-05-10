@@ -1,6 +1,6 @@
 package com.finalproyect.controllers;
 
-import com.finalproyect.entities.Users;
+import com.finalproyect.model.dtos.UserDto;
 import com.finalproyect.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class UserController {
 
     @RolesAllowed("user")
     @GetMapping("/user/print")
-    public ResponseEntity<Users> printUser(){
-        return  new ResponseEntity<>(this.userService.retrieveUser(), HttpStatus.OK);
+    public ResponseEntity<UserDto> printUser(){
+        return  new ResponseEntity<>(new UserDto(this.userService.retrieveUser()), HttpStatus.OK);
     }
 }

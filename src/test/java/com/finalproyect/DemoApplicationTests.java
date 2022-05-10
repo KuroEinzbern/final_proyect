@@ -2,12 +2,10 @@ package com.finalproyect;
 
 import com.finalproyect.controllers.CheckoutController;
 import com.finalproyect.controllers.OrderController;
+import com.finalproyect.controllers.UserController;
 import com.finalproyect.entities.*;
 import com.finalproyect.model.dtos.*;
-import com.finalproyect.model.exceptions.BadOrderException;
-import com.finalproyect.model.exceptions.CheckoutNotFoundException;
-import com.finalproyect.model.exceptions.LackOfStockException;
-import com.finalproyect.model.exceptions.ProductNotFoundException;
+import com.finalproyect.model.exceptions.*;
 import com.finalproyect.model.patterns.PaymentStrategiesEnum;
 import com.finalproyect.repositories.*;
 import com.finalproyect.services.KeycloakContextService;
@@ -39,6 +37,9 @@ class DemoApplicationTests {
 
     @Autowired
     OrderController orderController;
+
+    @Autowired
+    UserController userController;
 
     @Autowired
     public UserRepository userRepository;
@@ -96,6 +97,7 @@ class DemoApplicationTests {
     public void postTest(){
         this.userRepository.deleteAll();
         this.checkoutRepository.deleteAll();
+        this.productRepository.deleteAll();
     }
 
 
@@ -151,7 +153,7 @@ class DemoApplicationTests {
 
     @Test
     void test_successful_printPrintCheckout(){
-        when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz","juan",null,"funciona@hotmail.com"));
+        when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz","juan",null,"otromail@mail.com"));
         usersWithCheckout.setEmail("funciona@hotmail.com");
         Users users = this.userRepository.save(usersWithCheckout);
         ResponseEntity<UserDto> responseEntity=this.controllerApi.printCheckout();
@@ -174,6 +176,14 @@ class DemoApplicationTests {
     }
 
     @Test
+    void test_successful_printUser(){
+        when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz","juan",null,null));
+        this.userRepository.save(usersWithCheckout);
+        ResponseEntity<UserDto> responseEntity=this.userController.printUser();
+        assertThat(responseEntity.getBody().getEmail(),is(usersWithCheckout.getEmail()));
+    }
+
+    @Test
     void test_fail_addProduct_lackOfStock(){
         when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz","juan",null,"yes@mail.com"));
         usersWithCheckout.setEmail("yes@mail.com");
@@ -185,11 +195,7 @@ class DemoApplicationTests {
         Assertions.assertThrows(LackOfStockException.class,()->this.controllerApi.addProduct(productDto));
     }
 
-   /* @Test
-    void test_fail_printCheckout_userDontExistInDB(){
-        Assertions.assertThrows(UserNotFoundException.class,()->this.controllerApi.printCheckout());
-    }
-*/
+
     @Test
     void test_fail_addProduct_checkoutNotFound(){
         when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz","ricardo",null,"mail@diferente.com"));
@@ -243,6 +249,7 @@ class DemoApplicationTests {
         assertThat(users.getEmail(), is("miMail@hotmail"));
         assertThat(users.getCheckout().getPaymentStrategy(), is(PaymentStrategiesEnum.PAYPAL));
     }
+
 
 
 

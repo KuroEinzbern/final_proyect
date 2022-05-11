@@ -22,10 +22,16 @@ public class OrderDto {
 
     private UUID paymentId;
 
+    private String customerEmail;
+
+    private String customerName;
+
     public OrderDto(Order order){
         this.shoppingCart=order.getShoppingCart();
         this.shippingAddress=order.getShippingAddress();
         this.totalCost=order.getTotalCost();
         this.paymentId=order.getPaymentId();
+        this.customerEmail= order.getCustomerEmail();
+        this.customerName=order.getCustomerName();
     }
 }

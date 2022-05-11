@@ -53,4 +53,8 @@ public class ShoppingCartService {
         }
         return false;
     }
+
+    public ShoppingCart createShoppingCart(){
+        return this.shopppingCartRepository.save(new ShoppingCart());
+    }
 }

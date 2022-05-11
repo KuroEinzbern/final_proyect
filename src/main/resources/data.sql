@@ -6,10 +6,12 @@ insert into PRODUCTS (id,PRODUCTNAME, PRODUCTCODE,stock,UNITPRICE) values (4000,
 insert into Country (COUNTRYID,COUNTRYNAME,ISOCODE) values (5000, 'Italia','ITL' )
 insert into Country (COUNTRYID,COUNTRYNAME,ISOCODE) values (6000, 'Chile','CHL' )
 
-insert into City (city_id,CITYNAME,COUNTRY) values (7000,'Buenos Aires',5000)
+insert into City (city_id,CITYNAME,COUNTRY) values (7000,'venecia',5000)
 insert into City (city_id,CITYNAME,COUNTRY) values (8000,'Resistencia',5000)
 insert into City (city_id,CITYNAME,COUNTRY) values (9000,'Santiago',6000)
 insert into City (city_id,CITYNAME,COUNTRY) values (1000,'Valparaiso',6000)
+
+insert into SHIPPINGADDRESS (SHIPPINGADDRESSID,city_id,POSTALADDRESS) values (1300,7000,3030)
 
 insert into CHECKOUT (CHECKOUTID,SHOPPINGCART,SHIPPINGADDRESS,PAYMENTSTRATEGY) values (1100,null,null,0)
 

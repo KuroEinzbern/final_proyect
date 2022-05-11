@@ -24,6 +24,8 @@ public class CheckoutDto {
 
     private PaymentStrategiesEnum paymentStrategiesEnum;
 
+    private Long shippingAddressId;
+
 
 
     public CheckoutDto(ShoppingCart shoppingCart, ShippingAddress shippingAddress, PaymentStrategiesEnum paymentStrategiesEnum) {

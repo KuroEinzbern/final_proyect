@@ -10,16 +10,18 @@ import javax.persistence.*;
 @ToString
 @Getter
 @Setter
+@Table(name = "SHIPPINGADDRESS")
 public class ShippingAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "SHIPPINGADDRESSID")
     private Long shippingAddressId;
 
     @JoinColumn(name = "city_id")
     @ManyToOne
     private City city;
 
-    @Column
+    @Column(name="POSTALADDRESS")
     private Integer postalAddress;
 }

@@ -29,5 +29,11 @@ public class Order {
 
     @Column
     private UUID paymentId;
+    
+    @Column
+    private String customerEmail;
+
+    @Column
+    private String customerName;
 
 }

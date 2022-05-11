@@ -4,6 +4,8 @@ import com.finalproyect.entities.Checkout;
 import com.finalproyect.entities.Order;
 import com.finalproyect.entities.Users;
 import com.finalproyect.model.exceptions.BadOrderException;
+import com.finalproyect.repositories.OrderRepository;
+import com.finalproyect.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,15 @@ public class OrderService {
 
     @Autowired
     PaymentService paymentService;
+
+    @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    CheckoutService checkoutService;
+
+    @Autowired
+    UserRepository userRepository;
 
     public Order buildOrder(){
         Users user= this.userService.retrieveUser();
@@ -38,6 +49,12 @@ public class OrderService {
         order.setShippingAddress(checkout.getShippingAddress());
         order.setShoppingCart(checkout.getShoppingCart());
         order.setPaymentId(paymentId);
+        order.setCustomerEmail(user.getEmail());
+        order.setCustomerName(user.getName());
+        this.orderRepository.save(order);
+        this.checkoutService.deleteCurrentCheckout();
+        /*user.setCheckout(null);
+        this.userRepository.save(user);*/
         return order;
     }
 }

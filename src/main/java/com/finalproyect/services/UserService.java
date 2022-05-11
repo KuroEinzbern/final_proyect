@@ -26,7 +26,7 @@ public class UserService {
 
     public Users retrieveUser(){
         KeycloakUserDataDto userData= keycloakContextService.contextData();
-        Users optionalUser= this.userRepository.findByKeycloakId(userData.getKeycloakId());
+        Users optionalUser= this.userRepository.findByEmail(userData.getEmail());
         if(optionalUser!=null){
             return optionalUser;
         }

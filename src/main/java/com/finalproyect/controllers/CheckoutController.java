@@ -61,6 +61,7 @@ public class CheckoutController {
     @GetMapping("/checkout/printcheckout")
     public ResponseEntity<UserDto> printCheckout(){
         Users users = this.userService.retrieveUser();
+        if(users.getCheckout()==null)throw new CheckoutNotFoundException("este usuario no tiene una reserva en curso");
         return new ResponseEntity<>(new UserDto(users), HttpStatus.OK);
     }
 

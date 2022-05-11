@@ -5,10 +5,7 @@ import com.finalproyect.controllers.OrderController;
 import com.finalproyect.controllers.UserController;
 import com.finalproyect.entities.*;
 import com.finalproyect.model.dtos.*;
-import com.finalproyect.model.exceptions.BadOrderException;
-import com.finalproyect.model.exceptions.CheckoutNotFoundException;
-import com.finalproyect.model.exceptions.LackOfStockException;
-import com.finalproyect.model.exceptions.ProductNotFoundException;
+import com.finalproyect.model.exceptions.*;
 import com.finalproyect.model.patterns.PaymentStrategiesEnum;
 import com.finalproyect.repositories.*;
 import com.finalproyect.services.KeycloakContextService;
@@ -62,6 +59,9 @@ class DemoApplicationTests {
     @Autowired
     public CheckoutRepository checkoutRepository;
 
+    @Autowired
+    public OrderRepository orderRepository;
+
     public ShippingAddress shippingAddress;
 
     public ShoppingCart shopppingCart;
@@ -69,6 +69,7 @@ class DemoApplicationTests {
     public Users usersRicardo;
 
     public Users usersWithCheckout;
+
 
 
     @BeforeEach
@@ -98,6 +99,7 @@ class DemoApplicationTests {
         this.userRepository.deleteAll();
         this.checkoutRepository.deleteAll();
         this.productRepository.deleteAll();
+        this.orderRepository.deleteAll();
     }
 
 
@@ -185,6 +187,20 @@ class DemoApplicationTests {
             assertThat(responseEntity.getBody().getEmail(), is(usersWithCheckout.getEmail()));
         }
 
+        @Test
+        void test_successful_printOrder() {
+            when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz", "juan", null, "otromail@mail.com"));
+            userRepository.save(usersWithCheckout);
+            Product productShoes = productRepository.save(new Product(null, "zapatos", "a222", 10, 10D));
+            Product productHat = productRepository.save(new Product(null, "sombrero", "s222", 10, 2D));
+            controllerApi.addProduct(new ProductDto(productShoes));
+            controllerApi.addProduct(new ProductDto(productHat));
+            orderController.generateOrder();
+            ResponseEntity<OrdersDto> orders = orderController.printOrders();
+            assertThat(orders.getStatusCode(), is(HttpStatus.FOUND));
+            assertThat(orders.getBody().getOrders().size(), is(1));
+        }
+
     }
 
     @DisplayName("tests de endpoints de falla con excepciones manejadas")
@@ -243,6 +259,14 @@ class DemoApplicationTests {
             controllerApi.addProduct(new ProductDto(productShoes));
             controllerApi.addProduct(new ProductDto(productHat));
             Assertions.assertThrows(BadOrderException.class, () -> orderController.generateOrder());
+        }
+
+        @Test
+        void fail_printOrders_userWithoutOrders() {
+            when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz", "juan", null, "otromail@mail.com"));
+            userRepository.save(usersWithCheckout);
+            Assertions.assertThrows(OrderNotFoundException.class, () -> orderController.printOrders());
+
         }
 
     }

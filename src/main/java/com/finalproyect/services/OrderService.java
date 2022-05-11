@@ -3,13 +3,17 @@ package com.finalproyect.services;
 import com.finalproyect.entities.Checkout;
 import com.finalproyect.entities.Order;
 import com.finalproyect.entities.Users;
+import com.finalproyect.model.dtos.OrdersDto;
 import com.finalproyect.model.exceptions.BadOrderException;
 import com.finalproyect.repositories.OrderRepository;
 import com.finalproyect.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -56,5 +60,15 @@ public class OrderService {
         /*user.setCheckout(null);
         this.userRepository.save(user);*/
         return order;
+    }
+
+    public OrdersDto getOrders(){
+        Users users= this.userService.retrieveUser();
+        Iterable<Order> orders= this.orderRepository.findAll();
+        List<Order> orderList= new ArrayList<>();
+        orders.iterator().forEachRemaining(orderList::add);
+        List<Order> finalList=orderList.stream().filter(order ->order.getCustomerEmail().compareTo(users.getEmail())==0).collect(Collectors.toList());
+        OrdersDto ordersDto= new OrdersDto(finalList);
+        return ordersDto;
     }
 }

@@ -22,7 +22,7 @@ public class ProductService {
         Product product = this.productRepository.findByProductCode(productCode);
         if (product == null) throw new ProductNotFoundException("no existe un producto con ese ID product");
         if (product.getStock() >= quantity) return product;
-        throw new LackOfStockException("El stock actual del producto" + product.getStock() + "por lo que no se puede reservar" + quantity + "unidades");
+        throw new LackOfStockException("El stock actual del producto " + product.getStock() + " por lo que no se puede reservar " + quantity + " unidades");
     }
 
     public ProductForPrucharase retrieveProduct(String productCode, Integer quantity) {

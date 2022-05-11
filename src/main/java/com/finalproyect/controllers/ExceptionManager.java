@@ -43,4 +43,9 @@ public class ExceptionManager extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> catchBadOrder(BadOrderException ex, WebRequest webRequest){
         return handleExceptionInternal(ex,ex.getErrorMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND,webRequest);
     }
+
+    @ExceptionHandler(value = OrderNotFoundException.class)
+    public ResponseEntity<Object> catchBadOrder(OrderNotFoundException ex, WebRequest webRequest){
+        return handleExceptionInternal(ex,ex.getErrorMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND,webRequest);
+    }
 }

@@ -101,8 +101,6 @@ public class CheckoutService {
         users.setCheckout(null);
         this.userRepository.save(users);
         this.checkoutRepository.delete(checkout);
-
-
     }
 
 }

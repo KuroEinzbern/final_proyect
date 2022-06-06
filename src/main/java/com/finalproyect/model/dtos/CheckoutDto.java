@@ -18,6 +18,7 @@ public class CheckoutDto {
 
 
 
+
     private ShoppingCart shoppingCart;
 
     private ShippingAddress shippingAddress;

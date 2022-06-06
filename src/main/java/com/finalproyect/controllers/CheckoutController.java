@@ -2,14 +2,10 @@ package com.finalproyect.controllers;
 
 
 import com.finalproyect.entities.Checkout;
-import com.finalproyect.entities.Users;
-import com.finalproyect.model.exceptions.CheckoutNotFoundException;
 import com.finalproyect.model.dtos.CheckoutDto;
 import com.finalproyect.model.dtos.ProductDto;
-import com.finalproyect.model.dtos.UserDto;
+import com.finalproyect.model.exceptions.CheckoutNotFoundException;
 import com.finalproyect.services.CheckoutService;
-import com.finalproyect.services.PaymentService;
-import com.finalproyect.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +18,6 @@ public class CheckoutController {
 
     @Autowired
     CheckoutService checkoutService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    PaymentService paymentService;
-
 
     @RolesAllowed("user")
     @PostMapping("/checkout/newcheckout")
@@ -51,18 +40,15 @@ public class CheckoutController {
             this.checkoutService.addProduct(productDto);
             return new ResponseEntity<>(new CheckoutDto(this.checkoutService.getCurrentCheckout()), HttpStatus.OK);
         }
-        else {
-            Users users= this.userService.retrieveUser();
-            throw new CheckoutNotFoundException("el usuario" + users.getEmail() + "con id" + users.getUserId()+ "no tiene ninguna reserva a su nombre");
-        }
+            throw new CheckoutNotFoundException("el usuario no posee reservas a su nombre");
     }
 
     @RolesAllowed("user")
     @GetMapping("/checkout/printcheckout")
-    public ResponseEntity<UserDto> printCheckout(){
-        Users users = this.userService.retrieveUser();
-        if(users.getCheckout()==null)throw new CheckoutNotFoundException("este usuario no tiene una reserva en curso");
-        return new ResponseEntity<>(new UserDto(users), HttpStatus.OK);
+    public ResponseEntity<CheckoutDto> printCheckout(){
+        Checkout checkout=this.checkoutService.getCurrentCheckout();
+        if(checkout==null)throw new CheckoutNotFoundException("El usuario no posee una reserva");
+        return new ResponseEntity<>(new CheckoutDto(checkout), HttpStatus.OK);
     }
 
 }

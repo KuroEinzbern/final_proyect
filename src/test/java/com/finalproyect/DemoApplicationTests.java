@@ -160,9 +160,9 @@ class DemoApplicationTests {
         void test_successful_printPrintCheckout() {
             when(keycloakContextService.contextData()).thenReturn(new KeycloakUserDataDto("jjj-zzz", "juan", null, "otromail@mail.com"));
             userRepository.save(usersWithCheckout);
-            ResponseEntity<UserDto> responseEntity = controllerApi.printCheckout();
+            ResponseEntity<CheckoutDto> responseEntity = controllerApi.printCheckout();
             assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-            assertThat(responseEntity.getBody().getCheckoutDto().getPaymentStrategiesEnum(), is(PaymentStrategiesEnum.PAYPAL));
+            assertThat(responseEntity.getBody().getPaymentStrategiesEnum(), is(PaymentStrategiesEnum.PAYPAL));
         }
 
         @Test

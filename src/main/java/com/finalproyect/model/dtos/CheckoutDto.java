@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Max;
+
 @Getter
 @Setter
 @ToString
@@ -25,6 +27,7 @@ public class CheckoutDto {
 
     private PaymentStrategiesEnum paymentStrategiesEnum;
 
+    @Max(100000)
     private Long shippingAddressId;
 
 

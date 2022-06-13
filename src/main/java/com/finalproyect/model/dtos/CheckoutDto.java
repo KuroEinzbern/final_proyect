@@ -29,6 +29,8 @@ public class CheckoutDto {
 
     @Max(100000)
     private Long shippingAddressId;
+    
+    private Long testing;
 
 
 
